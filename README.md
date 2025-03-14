@@ -1,5 +1,5 @@
 
-# **Vision-Language Models and Flow Matching - Deep Generative Models HW4**
+# **Diffusion and Score-Based Generative Models - Deep Generative Models HW3**
 
 **University of Tehran** | **Department of Electrical and Computer Engineering**
 
@@ -19,8 +19,8 @@
 * [Course Information](https://chatgpt.com/c/67b0eae8-c268-8007-9df3-33d28ab21913#course-information)
 * [Assignment Details](https://chatgpt.com/c/67b0eae8-c268-8007-9df3-33d28ab21913#assignment-details)
 * [Sections Overview](https://chatgpt.com/c/67b0eae8-c268-8007-9df3-33d28ab21913#sections-overview)
-  * [Vision-Language Models (VLM)](https://chatgpt.com/c/67b0eae8-c268-8007-9df3-33d28ab21913#vision-language-models-vlm)
-  * [Flow Matching for Generative Modeling](https://chatgpt.com/c/67b0eae8-c268-8007-9df3-33d28ab21913#flow-matching-for-generative-modeling)
+  * [Diffusion Models](https://chatgpt.com/c/67b0eae8-c268-8007-9df3-33d28ab21913#diffusion-models)
+  * [Score-Based Generative Models](https://chatgpt.com/c/67b0eae8-c268-8007-9df3-33d28ab21913#score-based-generative-models)
 * [Implementation Details](https://chatgpt.com/c/67b0eae8-c268-8007-9df3-33d28ab21913#implementation-details)
 * [Mathematical Derivations](https://chatgpt.com/c/67b0eae8-c268-8007-9df3-33d28ab21913#mathematical-derivations)
 * [Training and Experimentation](https://chatgpt.com/c/67b0eae8-c268-8007-9df3-33d28ab21913#training-and-experimentation)
@@ -33,15 +33,18 @@
 
 ## **Introduction**
 
-This repository contains **Homework 4** for the **Deep Generative Models** course at the  **University of Tehran** . The assignment explores  **cutting-edge generative models** , focusing on:
+This repository contains **Homework 3** for the **Deep Generative Models** course at the  **University of Tehran** . The assignment covers  **two major generative modeling techniques** :
 
-* **Vision-Language Models (VLMs)** , particularly **PaliGemma**
-* **Fine-tuning large-scale models for Image-Question Answering (IQA)**
-* **Evaluating generative models using ROUGE Score**
-* **Flow Matching for continuous-time generative modeling**
-* **Optimal Transport in generative models**
+* **Diffusion-Based Models** :
+* **DDPM (Denoising Diffusion Probabilistic Models)**
+* **DDIM (Denoising Diffusion Implicit Models)**
+* **Forward and Backward Diffusion Processes**
+* **Score-Based Generative Models** :
+* Learning probability densities using **score functions**
+* **Sliced Score Matching (SSM)**
+* **Langevin Dynamics for Sampling**
 
-This assignment provides **both theoretical and practical** components, allowing students to explore  **state-of-the-art generative techniques** .
+This assignment provides **both theoretical and practical** components to help students gain hands-on experience with  **modern generative techniques** .
 
 ---
 
@@ -57,61 +60,65 @@ This assignment provides **both theoretical and practical** components, allowing
 
 ## **Assignment Details**
 
-This homework consists of  **two major sections** :
+This homework consists of  **two main sections** :
 
-### **1. Vision-Language Models (VLM)**
+### **1. Diffusion Models**
 
-* Understanding multimodal learning (vision + language)
-* Fine-tuning **PaliGemma** for **image-based question answering**
-* Optimizing memory usage with **LoRA and QLoRA**
-* Evaluating models using **ROUGE Score**
+* Understanding **Forward and Backward Diffusion**
+* Implementing **DDPM and DDIM**
+* Training a **Diffusion Model on the Sprites Dataset**
+* Comparing **DDPM and DDIM sampling efficiency**
+* Implementing **FID (Frechet Inception Distance) for evaluation**
 
-### **2. Flow Matching for Generative Modeling**
+### **2. Score-Based Generative Models**
 
-* Mathematical derivation of **Flow Matching**
-* Understanding **Optimal Transport in Flow-Based Generative Models**
-* Implementing **Continuous Normalizing Flows (CNFs) for data generation**
+* Understanding **Score Matching**
+* Implementing **Sliced Score Matching (SSM)**
+* **Noise Perturbation Techniques** for learning the score function
+* Implementing **Langevin Dynamics Sampling**
 
 ---
 
 ## **Sections Overview**
 
-### **Vision-Language Models (VLM)**
+### **Diffusion Models**
 
-VLMs integrate **image and text** to perform tasks such as  **image-based question answering, caption generation, and visual reasoning** .
+Diffusion models progressively **add noise** to data in a **forward process** and learn to **reverse this process** to generate new samples.
 
 #### **Tasks:**
 
-1. **Understanding Vision-Language Models (VLMs)**
-   * Explain how **PaliGemma** differs from standard text-based models.
-   * Compare **PaliGemma, DALL·E, and Imagen** architectures.
-2. **Fine-Tuning PaliGemma for Image-Question Answering**
-   * Fine-tune **PaliGemma-3B** using the  **CLEVR dataset** .
-   * Utilize **LoRA and QLoRA** for memory-efficient fine-tuning.
-3. **Evaluating Performance using ROUGE Score**
-   * Compute **ROUGE Score** for evaluating  **generated text responses** .
-   * Compare model performance before and after fine-tuning.
-4. **Memory Optimization in Fine-Tuning**
-   * Compare **full fine-tuning vs. LoRA fine-tuning** in memory usage.
-   * Explain the benefits of **Quantization (NF4 datatype)** in reducing model size.
+1. **Understanding Diffusion Models**
+   * Explain the **Markov process** in forward diffusion.
+   * Prove that adding Gaussian noise results in a normal distribution.
+2. **Implementing DDPM and DDIM**
+   * Implement **DDPM training** on the  **Sprites dataset** .
+   * Implement **DDIM sampling** and compare results with DDPM.
+3. **Training a Noise Scheduler**
+   * Implement a **linear noise scheduler** to control diffusion.
+4. **Sampling from a Trained Model**
+   * Compare **DDPM and DDIM** in terms of **sampling speed** and quality.
+   * Use **FID score** for quantitative evaluation.
 
 ---
 
-### **Flow Matching for Generative Modeling**
+### **Score-Based Generative Models**
 
-Flow Matching models use **continuous-time transformations** to map a simple distribution (e.g., Gaussian noise) to a complex data distribution.
+Score-based models learn to **model probability distributions** using **score functions** instead of explicit density functions.
 
 #### **Tasks:**
 
-1. **Mathematical Analysis of Flow Matching**
-   * Derive the  **Flow Matching equation** .
-   * Explain why  **Flow Matching avoids iterative sampling** .
-2. **Optimal Transport in Flow Matching**
-   * Describe how **Optimal Transport** improves Flow Matching.
-   * Compare  **Flow Matching to Diffusion Models** .
-3. **Implementing Flow Matching Models**
-   * Implement a  **Flow Matching generative model** .
-   * Train the model using  **ODE-based continuous transformations** .
+1. **Understanding Score-Based Models**
+   * Explain how **Score Matching** differs from standard generative models.
+   * Compare  **Diffusion Models vs. Score-Based Models** .
+2. **Implementing Score Matching**
+   * Implement **Sliced Score Matching (SSM)** to learn score functions.
+   * Train a model using  **noise perturbation techniques** .
+3. **Sampling Using Langevin Dynamics**
+   * Implement **Langevin Dynamics Sampling** to generate samples.
+   * Compare **Langevin Sampling** with Diffusion Sampling.
+4. **Evaluating Model Performance**
+   * Visualize results using **scatter plots** and  **density estimates** .
+   * Compare different  **perturbation noise levels** .
 
 ---
 
@@ -119,47 +126,46 @@ Flow Matching models use **continuous-time transformations** to map a simple dis
 
 ### **Dataset**
 
-* **Vision-Language Models** : **CLEVR dataset** (for image-question answering).
-* **Flow Matching Models** : **Synthetic data** with  **optimal transport properties** .
+* **Diffusion Models** : **Sprites dataset** (16x16 pixel game character images)
+* **Score-Based Models** : **Mixture of Gaussians**
 
-### **VLM Fine-Tuning**
+### **DDPM/DDIM Training Parameters**
 
-| **Component**        | **Details** |
-| -------------------------- | ----------------- |
-| **Base Model**       | PaliGemma-3B      |
-| **Optimizer**        | AdamW             |
-| **Fine-Tuning**      | LoRA, QLoRA       |
-| **ROUGE Evaluation** | Yes               |
+| Parameter      | Value  |
+| -------------- | ------ |
+| Learning Rate  | 0.0002 |
+| Batch Size     | 64     |
+| Training Steps | 50,000 |
 
-### **Flow Matching Model Parameters**
+### **Score Matching Model Parameters**
 
-| Parameter      | Value   |
-| -------------- | ------- |
-| Learning Rate  | 0.0002  |
-| Batch Size     | 64      |
-| Training Steps | 100,000 |
+| Parameter     | Value     |
+| ------------- | --------- |
+| Noise Levels  | [1, 3, 7] |
+| Learning Rate | 0.001     |
+| Batch Size    | 128       |
 
 ---
 
 ## **Mathematical Derivations**
 
-1. **Flow Matching Equations**
-   * Show how **Flow Matching avoids iterative sampling** in normalizing flows.
-2. **Why Use Optimal Transport?**
-   * Explain how **Optimal Transport** improves generative performance.
-3. **Computing ROUGE Score**
-   * ROUGE measures **text similarity** between generated responses and ground truth:
-     ROUGE=overlapping wordstotal words in referenceROUGE = \frac{\text{overlapping words}}{\text{total words in reference}}
+1. **Forward Diffusion Process**
+   * Derive the  **Markov transition probabilities** .
+   * Prove that **adding Gaussian noise** leads to a normal distribution.
+2. **Score Matching Equations**
+   * Explain how **Sliced Score Matching (SSM)** reduces complexity.
+   * Compare  **SSM vs. Vanilla Score Matching** .
+3. **Langevin Dynamics**
+   * Show why **Langevin Sampling** converges to the true distribution.
 
 ---
 
 ## **Training and Experimentation**
 
-1. **Fine-tune PaliGemma** and evaluate performance on  **CLEVR dataset** .
-2. **Compare LoRA vs. QLoRA** for efficient fine-tuning.
-3. **Train a Flow Matching model** and evaluate generated samples.
-
----
+1. **Train DDPM and DDIM** on the Sprites dataset.
+2. **Compare DDPM vs. DDIM Sampling Time** .
+3. **Train a Score-Based Model** on a  **Mixture of Gaussians** .
+4. **Visualize Langevin Sampling Convergence** .
 
 ## **License**
 
